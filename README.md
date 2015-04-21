@@ -57,7 +57,7 @@ console.log(Model.get("children.child1")); // 输出"Lucy"
 console.log(Model.jsonData()); // 输出{"name":"Tom","age":"25","sex":"male"};
 
 // 绑定事件回调到任意标志符的任意事件
-Mode.on("hungry", "baby", function (food) {
+Model.on("hungry", "baby", function (food) {
     console.log("baby feeded with " + food);
 });
 
