@@ -7,7 +7,7 @@
 - 可以使用本模块来绑定任何事件到任意合法字符串标志符上
 
 ##范例
-```
+```javascript
 var Model = SimpleModel,
     data  = {"name":"Jack","age":"25","sex":"male"};
 
