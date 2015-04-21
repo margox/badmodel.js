@@ -17,7 +17,7 @@ var SimpleModel = (function(){
     /**
      * 基于现有数据来初始化
      * @param {object} data 需要传入的JSON数据
-     * @return {[type]} [description]
+     * @return {object} 返回_simpleModel对象以便于链式操作
      */
     function _init (data) {
 
