@@ -5,6 +5,7 @@
 - 支持nested属性访问(data.a.b.c)
 - 使用set方法设置属性时,会触发属性对应的change回调函数.
 - 可以使用本模块来绑定任何事件到任意合法字符串标志符上
+
 ##范例
 ```
 var Model = SimpleModel,
