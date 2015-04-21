@@ -53,8 +53,8 @@ Model.set("children.child1", "Lucy");
 // 输出 "children.child1 changed to Lucy" 
 
 console.log(Model.get("children.child1")); // 输出"Lucy"
-
-console.log(Model.jsonData()); // 输出{"name":"Tom","age":"25","sex":"male"};
+console.log(Model.jsonData());
+// 输出{"name":"Tom","age":"25","sex":"male","brother":"null","sister":"null","children":{"child1":"lucy","child2":"Rose","child3":"Pual"}};
 
 // 绑定事件回调到任意标志符的任意事件
 Model.on("hungry", "baby", function (food) {
