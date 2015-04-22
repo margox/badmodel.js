@@ -1,6 +1,6 @@
 # simple-json-processer
 自用的一个JSON数据处理器,极限阉割版的backbone ⊙﹏⊙‖∣°
-##特性:
+##特性
 - 支持链式操作
 - 支持nested属性访问(data.a.b.c)
 - 使用set方法设置属性时,会触发属性对应的change回调函数.
