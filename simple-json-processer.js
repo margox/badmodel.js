@@ -84,53 +84,6 @@ var SimpleModel = (function(){
 
     }
 
-
-    //遗弃方法
-    function _set (property, value) {
-
-        var _prop,_propN,_propI,_item;
-
-
-        if (typeof property === "string") {
-
-            if ( _trigger("beforechange", property, value) === false) {
-                return false;
-            }
-
-            if (property.indexOf(".") > 0) {
-
-                _prop  = property.split(".");
-                _propN = _prop[0];
-                _propI = _prop[1];
-
-                typeof _data[_propN] !== "object" && (_data[_propN] = {});
-                _data[_propN][_propI] = value;
-                _trigger("change", _propN, _nestedGet(_propN));
-
-            } else {
-
-                _data[property] = value;
-
-            }
-
-            _trigger("change", property, value);
-
-        } else if (typeof property === "object") {
-
-            for (_item in property) {
-
-                if (property.hasOwnProperty(_item)) {
-                    _set(_item, property[_item]);
-                }
-
-            }
-
-        }
-
-        return _simpleModel;
-
-    };
-
     /**
      * 获取属性值
      * @param  {string} property      属性名称
@@ -161,39 +114,6 @@ var SimpleModel = (function(){
         }
 
     }
-
-    //遗弃方法
-    function _get (property) {
-
-        var _tempData,_prop,_propN,_propI;
-
-        _tempData = arguments[1] ? _originData : _data;
-
-        if (typeof property === "string" ) {
-
-            if (_tempData.hasOwnProperty(property)) {
-                return _tempData[property];
-            } else if (property.indexOf(".") > 0) {
-
-                _prop  = property.split(".");
-                _propN = _prop[0];
-                _propI = _prop[1];
-
-                if (_tempData.hasOwnProperty(_propN) && _tempData[_propN].hasOwnProperty(_propI)) {
-                    return _tempData[_propN][_propI];
-                } else {
-                    return null;
-                }
-
-            } else {
-                return null;
-            }
-                
-        } else {
-            return null;
-        }
-
-    };
 
     /**
      * 重置所有或指定属性
