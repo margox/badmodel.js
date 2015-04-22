@@ -17,7 +17,8 @@ Model.init(data).on("change", "name", function (name) {
 });
 
 // 更改name为Tom
-Model.set("name", "Tom"); // 输出"New name is Tom"
+Model.set("name", "Tom");
+// 输出"New name is Tom"
 
 // 批量绑定回调
 Model.on({
@@ -47,12 +48,14 @@ Model.on("change", "children", function () {
     console.log("children.child1 changed to " + child1);
 });
 
-//nested方式属性访问
+// nested方式属性访问
 Model.set("children.child1", "Lucy");
 // 输出 "children has been changed"
 // 输出 "children.child1 changed to Lucy" 
 
-console.log(Model.get("children.child1")); // 输出"Lucy"
+console.log(Model.get("children.child1"));
+// 输出"Lucy"
+
 console.log(Model.jsonData());
 // 输出{"name":"Tom","age":"25","sex":"male","brother":"null","sister":"null","children":{"child1":"Lucy","child2":"Rose","child3":"Pual"}};
 
@@ -62,5 +65,6 @@ Model.on("hungry", "baby", function (food) {
 });
 
 // 触发事件
-Model.trigger("hungry", "baby", "milk"); // 输出"baby feeded with milk"
+Model.trigger("hungry", "baby", "milk");
+// 输出"baby feeded with milk"
 ```
