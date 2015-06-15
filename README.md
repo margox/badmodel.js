@@ -23,7 +23,7 @@ Model.set("name", "Tom");
 // 批量绑定回调
 Model.on({
     "change:age" : function (age) {console.log("Age changed to " + age);},
-    "change:sex" : function (sex) {console.log("Sex changed to " + sex);},
+    "change:sex" : function (sex) {console.log("Sex changed to " + sex);}
 });
 
 // 设置新的属性
@@ -32,14 +32,14 @@ Model.set("father", "Margox").set("mother", "Undefined");
 // 批量设置新的属性
 Model.set({
     "brother" : "null",
-    "sister"  : "null",
+    "sister"  : "null"
 });
 
 Model.set({
     "children" : {
         "child1" : "Jim",
         "child2" : "Rose",
-        "child3" : "Pual",
+        "child3" : "Pual"
     }
 });
 Model.on("change", "children", function () {
