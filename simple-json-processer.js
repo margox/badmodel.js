@@ -1,25 +1,35 @@
 /**
- * JSON数据处理器
- * @author 王刚
- * @version 1.0.0
- * @date 2015/03
+ * 一个微型Model模块
+ * @author  margox
+ * @version 1.1.5
+ * @date    2015/06
  */
 
-var SimpleModel = (function(){
+(function(root, factory){
+
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {
+        root.Mobiless = factory();
+    }
+
+})(window,function() {
 
     "use strict";
 
     var _simpleModel = {},
-        _data        = {},
-        _originData  = {},
-        _events      = {};
+        _data = {},
+        _originData = {},
+        _events = {};
 
     /**
      * 基于现有数据来初始化
      * @param {object} data 需要传入的JSON数据
-     * @return {object} 返回_simpleModel对象以便于链式操作
+     * @return {object} [description]
      */
-    function _init (data) {
+    function _init(data) {
 
         var _item;
 
@@ -41,13 +51,13 @@ var SimpleModel = (function(){
     /**
      * 设置一个属性的值,如果没有,则新增属性
      * @param {string} property 属性名称
-     * @param {all} value       属性值,可以是任何合法的类型
+     * @param {*} value       属性值,可以是任何合法的类型
      * @return {object}         返回_simpleModel对象以便于链式操作
      * @uses _nestedSet("object-name","name")/_nestedSet("object.name","name");
      */
     function _nestedSet(property, value) {
 
-        var propNames,propLength,tempObj,tempProp,_item;
+        var propNames, propLength, tempObj, tempProp, _item;
 
         if (typeof property === "string") {
 
@@ -55,26 +65,28 @@ var SimpleModel = (function(){
             propLength = propNames.length - 1;
             tempObj = _data;
 
-            for (var i = 0; i <= propLength ; i++) {
+            for (var i = 0; i <= propLength; i++) {
 
                 if (i !== propLength) {
-                    tempObj = tempObj[propNames[i]] =  tempObj[propNames[i]] || {}
+                    tempObj = tempObj[propNames[i]] = tempObj[propNames[i]] || {}
                 } else {
                     tempObj = tempObj[propNames[i]] = value;
                 }
 
-                tempProp = propNames.slice(0,i).join(".");
+                tempProp = propNames.slice(0, i).join(".");
                 _trigger("change", tempProp, _nestedGet(tempProp));
+
             }
+
             _trigger("change", property, value);
 
         } else if (typeof property === "object") {
 
             for (_item in property) {
 
-                //if (property.hasOwnProperty(_item)) {
+                if (property.hasOwnProperty(_item)) {
                     _nestedSet(_item, property[_item]);
-                //}
+                }
 
             }
 
@@ -85,21 +97,54 @@ var SimpleModel = (function(){
     }
 
     /**
+     * 往一个数组类型的值中push一个元素
+     * @param property
+     * @param value
+     * @returns {{}}
+     * @private
+     */
+    function _push(property, value) {
+
+        var _item = _nestedGet(property);
+
+        if (_item instanceof Array) {
+
+            _item.push(value);
+            _nestedSet(property, value);
+
+        }
+
+        return _simpleModel;
+
+    }
+
+    /**
+     * 交替改变一个值的属性(非布尔值将被转换为布尔值)
+     * @param property
+     * @returns {Object}
+     * @private
+     */
+    function _toggle(property) {
+
+        return _nestedSet(property, !_nestedGet(property));
+
+    }
+
+    /**
      * 获取属性值
      * @param  {string} property      属性名称
-     * @param  {boolean} [originData] 是否是从源数据中获取
-     * @return {all}                  可以是任意合法的数据
+     * @return {object}               可以是任意合法的数据
      * @uses _nestedGet("object-name")//_nestedGet("object.name")
      */
-    function _nestedGet (property) {
+    function _nestedGet(property) {
 
         var _path = property.split(".");
         var _pathDepth = _path.length;
         var _objTemp = arguments[1] ? _originData : _data;
 
-        for (var _i = 0; _i <= _pathDepth; _i ++) {
+        for (var _i = 0; _i <= _pathDepth; _i++) {
 
-            if (_i === _pathDepth ) {
+            if (_i === _pathDepth) {
                 return _objTemp;
             } else {
 
@@ -120,7 +165,7 @@ var SimpleModel = (function(){
      * @param  {string} property 属性名称,不填写则重置所有
      * @return {object}          返回_simpleModel对象以便于链式操作
      */
-    function _reset (property) {
+    function _reset(property) {
 
         if (_trigger("beforereset", "__self__", property) === false) {
             return false;
@@ -149,28 +194,27 @@ var SimpleModel = (function(){
      * @param  {string} eventTarget 对象名称
      * @return {object}             返回_simpleModel对象以便于链式操作
      */
-    function _trigger (eventName, eventTarget) {
+    function _trigger(eventName, eventTarget) {
 
-        //console.log(eventName, eventTarget);
 
         var _arguments = typeof arguments[2] !== "undefined" ? arguments[2] : null;
         var _returnFalse = false,
             _return;
 
         if (_events.hasOwnProperty(eventTarget) && _events[eventTarget].hasOwnProperty(eventName) && (_events[eventTarget][eventName] instanceof Array)) {
-             
-            _events[eventTarget][eventName].forEach(function(callback){
+
+            _events[eventTarget][eventName].forEach(function (callback) {
 
                 _return = (callback)(_arguments);
                 _return === false && (_returnFalse = true);
 
-             });
+            });
 
         }
 
         return _returnFalse ? false : _simpleModel;
 
-    };
+    }
 
     /**
      * 注册一个事件到指定标识上
@@ -179,16 +223,14 @@ var SimpleModel = (function(){
      * @param  {Function} callback    回调函数
      * @return {object}               返回_simpleModel对象以便于链式操作
      */
-    function _on (eventName, eventTarget, callback) {
-
-        //console.log(eventName,eventTarget,callback);
+    function _on(eventName, eventTarget, callback) {
 
         if (typeof eventName === "object") {
 
             _renderEvents(eventName);
 
         } else if (typeof eventTarget === "string" && typeof eventName === "string" && typeof callback === "function") {
-        
+
             _events[eventTarget] || (_events[eventTarget] = {});
             _events[eventTarget][eventName] || (_events[eventTarget][eventName] = []);
             _events[eventTarget][eventName].push(callback);
@@ -205,7 +247,7 @@ var SimpleModel = (function(){
      * @param  {string} eventName   事件名称,不填写则注销所有事件
      * @return {object}             返回_simpleModel对象以便于链式操作
      */
-    function _off (eventTarget, eventName) {
+    function _off(eventTarget, eventName) {
 
         if (typeof eventTarget === "string") {
 
@@ -224,7 +266,7 @@ var SimpleModel = (function(){
     /**
      * 清除所有事件
      */
-    function _offAll () {
+    function _offAll() {
 
         var _selfEvents = _events.__self__;
 
@@ -238,7 +280,7 @@ var SimpleModel = (function(){
      * @param  {Function} callback 回调函数
      * @return {object}            返回_simpleModel对象以便于链式操作
      */
-     function _onResetAll (callback) {
+    function _onResetAll(callback) {
 
         _on("reset", "__self__", callback);
 
@@ -255,9 +297,9 @@ var SimpleModel = (function(){
      *               "change:property.sub" : testfunc,
      *             });
      */
-    function _renderEvents (events) {
+    function _renderEvents(events) {
 
-        var _event,_target,_callback;
+        var _event, _target, _callback;
 
         if (typeof events === "object") {
 
@@ -266,9 +308,9 @@ var SimpleModel = (function(){
                 if (events.hasOwnProperty(_event)) {
 
                     _callback = events[_event];
-                    _event    = _event.split(":");
-                    _target   = _event[1];
-                    _event    = _event[0];
+                    _event = _event.split(":");
+                    _target = _event[1];
+                    _event = _event[0];
 
                     if (typeof _callback === "function") {
                         _on(_event, _target, _callback);
@@ -287,7 +329,7 @@ var SimpleModel = (function(){
      * @param  {object} data 待克隆的JSON
      * @return {object}      新JSON
      */
-    function _clone (data) {
+    function _clone(data) {
 
         if (typeof data === "object") {
             return JSON.parse(JSON.stringify(data));
@@ -298,38 +340,10 @@ var SimpleModel = (function(){
     }
 
     /**
-     * 判断数组是否包含指定元素
-     * @param  {all} find    需要检查的元素
-     * @param  {array} array 需要检查的数组
-     * @return {boolean}
-     */
-    function _inArray (find, array) {
-
-        var _l;
-
-        if (typeof Array.prototype.contains === "function") {
-            return array.contains(find);
-        }
-
-        _l = array.length;
-
-        while (_l--) {
-
-            if (array[_l] === find) {
-                return true;
-            }
-
-        }
-
-        return false;
-
-    }
-
-    /**
      * 返回被处理后的数据
      * @return {object}
      */
-    function _jsonData () {
+    function _jsonData() {
 
         return arguments[0] ? _originData : _clone(_data);
 
@@ -339,28 +353,30 @@ var SimpleModel = (function(){
      * 返回被处理的数据字符串
      * @return {string}
      */
-    function _stringData () {
+    function _stringData() {
 
         return JSON.stringify(_data);
 
     }
 
     _simpleModel = {
-        __events__ : _events,
-        init       : _init,
-        on         : _on,
-        off        : _off,
-        trigger    : _trigger,
-        get        : _nestedGet,
-        set        : _nestedSet,
-        reset      : _reset,
-        onResetAll : _onResetAll,
-        inArray    : _inArray,
-        jsonData   : _jsonData,
-        stringData : _stringData,
-        isModel    : true,
+        __events__: _events,
+        init: _init,
+        on: _on,
+        off: _off,
+        offAll: _offAll,
+        trigger: _trigger,
+        get: _nestedGet,
+        set: _nestedSet,
+        toggle: _toggle,
+        push: _push,
+        reset: _reset,
+        onResetAll: _onResetAll,
+        jsonData: _jsonData,
+        stringData: _stringData,
+        isModel: true
     };
 
     return _simpleModel;
 
-}());
+});
