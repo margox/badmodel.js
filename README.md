@@ -59,6 +59,20 @@ console.log(Model.get("children.child1"));
 console.log(Model.jsonData());
 // 输出{"name":"Tom","age":"25","sex":"male","brother":"null","sister":"null","children":{"child1":"Lucy","child2":"Rose","child3":"Pual"}};
 
+// toggle方法
+Model.set("status","aaa").toggle("status");
+console.log(Model.get("status"));
+//输出false
+
+Model.toggle("status");
+console.log(Model.get("status"));
+//输出true
+
+// push方法，用于将一个元素追加到数组类型的数据里面
+Model.set("data_array",["a","b","c"]).push("data_array","d");
+console.log(Model.get("data_array"));
+// 输出["a","b","c","d"]
+
 // 绑定事件回调到任意标志符的任意事件
 Model.on("hungry", "baby", function (food) {
     console.log("baby feeded with " + food);
