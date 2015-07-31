@@ -12,7 +12,7 @@
     } else if (typeof define === 'function' && define.amd) {
         define(factory);
     } else {
-        root.Mobiless = factory();
+        root.SimpleModel = factory();
     }
 
 })(window,function() {
