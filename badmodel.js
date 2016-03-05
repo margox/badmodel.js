@@ -12,14 +12,14 @@
     } else if (typeof define === 'function' && define.amd) {
         define(factory);
     } else {
-        root.SimpleModel = factory();
+        root.badModel = factory();
     }
 
 })(window,function() {
 
     "use strict";
 
-    var _simpleModel = {},
+    var _badModel = {},
         _data = {},
         _originData = {},
         _events = {};
@@ -44,7 +44,7 @@
 
         }
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
@@ -52,7 +52,7 @@
      * 设置一个属性的值,如果没有,则新增属性
      * @param {string} property 属性名称
      * @param {*} value       属性值,可以是任何合法的类型
-     * @return {object}         返回_simpleModel对象以便于链式操作
+     * @return {object}         返回_badModel对象以便于链式操作
      * @uses _nestedSet("object-name","name")/_nestedSet("object.name","name");
      */
     function _nestedSet(property, value) {
@@ -92,7 +92,7 @@
 
         }
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
@@ -114,7 +114,7 @@
 
         }
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
@@ -163,7 +163,7 @@
     /**
      * 重置所有或指定属性
      * @param  {string} property 属性名称,不填写则重置所有
-     * @return {object}          返回_simpleModel对象以便于链式操作
+     * @return {object}          返回_badModel对象以便于链式操作
      */
     function _reset(property) {
 
@@ -184,7 +184,7 @@
 
         }
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
@@ -192,7 +192,7 @@
      * 执行注册在一个对象上的事件
      * @param  {string} eventName   事件名称
      * @param  {string} eventTarget 对象名称
-     * @return {object}             返回_simpleModel对象以便于链式操作
+     * @return {object}             返回_badModel对象以便于链式操作
      */
     function _trigger(eventName, eventTarget) {
 
@@ -212,7 +212,7 @@
 
         }
 
-        return _returnFalse ? false : _simpleModel;
+        return _returnFalse ? false : _badModel;
 
     }
 
@@ -221,7 +221,7 @@
      * @param  {string}   eventName   事件名称
      * @param  {string}   eventTarget 标识名称
      * @param  {Function} callback    回调函数
-     * @return {object}               返回_simpleModel对象以便于链式操作
+     * @return {object}               返回_badModel对象以便于链式操作
      */
     function _on(eventName, eventTarget, callback) {
 
@@ -237,7 +237,7 @@
 
         }
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
@@ -245,7 +245,7 @@
      * 注销一个标识上绑定的所有事件或指定事件
      * @param  {string} eventTarget 标识名称
      * @param  {string} eventName   事件名称,不填写则注销所有事件
-     * @return {object}             返回_simpleModel对象以便于链式操作
+     * @return {object}             返回_badModel对象以便于链式操作
      */
     function _off(eventTarget, eventName) {
 
@@ -259,7 +259,7 @@
 
         }
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
@@ -278,20 +278,20 @@
     /**
      * 指定当重置全部属性后的回调
      * @param  {Function} callback 回调函数
-     * @return {object}            返回_simpleModel对象以便于链式操作
+     * @return {object}            返回_badModel对象以便于链式操作
      */
     function _onResetAll(callback) {
 
         _on("reset", "__self__", callback);
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
     /**
      * 内部方法,用于批量处理事件注册
      * @param  {object} events 包含批量事件/回调键值对的对象
-     * @return {object}        返回_simpleModel对象以便于链式操作
+     * @return {object}        返回_badModel对象以便于链式操作
      * @uses   .__renderEvents({
      *                 "change:property"     : function(value){alert(value)},
      *               "change:property.sub" : testfunc,
@@ -320,7 +320,7 @@
             }
         }
 
-        return _simpleModel;
+        return _badModel;
 
     }
 
@@ -359,7 +359,7 @@
 
     }
 
-    _simpleModel = {
+    _badModel = {
         __events__: _events,
         init: _init,
         on: _on,
@@ -377,6 +377,6 @@
         isModel: true
     };
 
-    return _simpleModel;
+    return _badModel;
 
 });
