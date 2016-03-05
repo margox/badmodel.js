@@ -1,4 +1,4 @@
-# simple-json-processer
+# badmodel.js
 自用的一个Model模块,极限阉割版的backbone ⊙﹏⊙‖∣°
 ##特性
 - 支持链式操作
