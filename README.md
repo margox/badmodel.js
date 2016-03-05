@@ -8,7 +8,7 @@
 
 ##范例
 ```javascript
-var Model = SimpleModel,
+var Model = badModel,
     data  = {"name":"Jack","age":"25","sex":"male"};
 
 // 依据data来初始化模块,同时指定name属性改变时候的回调
